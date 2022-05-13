@@ -46,4 +46,13 @@ class SendGmailController extends Controller
         }
         Yii::$app->mailer->sendMultiple($messages);
     }
+    public  function actionSendFileGmail()
+    {
+        Yii::$app->mailer->compose()
+            ->setFrom('anhkhanh5539574@gmail.com')
+            ->setTo('khanh87599@st.vimaru.edu.vn')
+            ->setSubject('Gửi file')
+            ->attach(dirname(dirname(__DIR__)).'/README.md') // dirname(dirname(__DIR__)) -> /var/www/html/advanced
+            ->send();
+    }
 }
