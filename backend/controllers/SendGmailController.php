@@ -32,6 +32,7 @@ class SendGmailController extends Controller
           'success'=>"",
       ]);
     }
+    //gửi gmail cho nhiều người
     public  function  actionSendListGmail()
     {
         $messages=[];
@@ -46,6 +47,7 @@ class SendGmailController extends Controller
         }
         Yii::$app->mailer->sendMultiple($messages);
     }
+    //Gửi file
     public  function actionSendFileGmail()
     {
         Yii::$app->mailer->compose()
@@ -55,6 +57,7 @@ class SendGmailController extends Controller
             ->attach(dirname(dirname(__DIR__)).'/README.md') // dirname(dirname(__DIR__)) -> /var/www/html/advanced
             ->send();
     }
+    //gửi file cho nhiều người
     public function actionSendFileListGmail()
     {
         $msg=[];
@@ -70,6 +73,33 @@ class SendGmailController extends Controller
                     ->attach(dirname(dirname(__DIR__)).'/README.md')
                     ->setHtmlBody("<b>gửi nhiều ấy nhé</b>") ;
             }
+        }
+        Yii::$app->mailer->sendMultiple($msg);
+    }
+    // Gửi mẫu có sẵn
+    public function actionSendMauGmail()
+    {
+        Yii::$app->mailer->compose('Reset')
+            ->setFrom('anhkhanh5539574@gmail.com')
+            ->setTo('khanh87599@st.vimaru.edu.vn')
+            ->setSubject('Content view')
+            ->send();
+    }
+    //Gửi form cho nhiều người
+    public function actionSendMauListGmail()
+    {
+        $msg=[];
+        $model=User::find()->all();
+        foreach ($model as $item)
+        {
+            if($item->email!= null)
+            {
+                $msg[]=Yii::$app->mailer->compose('Reset')
+                    ->setFrom('anhkhanh5539574@gmail.com')
+                    ->setTo($item->email)
+                    ->setSubject("Gửi nhiều form");
+            }
+
         }
         Yii::$app->mailer->sendMultiple($msg);
     }
