@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\models\User;
 use yii\web\Controller;
 use Yii;
 use yii\base\InvalidArgumentException;
@@ -21,14 +22,28 @@ class SendGmailController extends Controller
             ->setTo($email) // Mail sẽ nhận
             ->setSubject($tieu_de) // tiêu đề mail
             ->setHtmlBody("<b>{$noi_dung}</b>") // Nội dung mail dạng Html nếu không muốn dùng html thì có thể thay thế bằng setTextBody('Nội dung gửi mail trong Yii2') để chỉ hiển thị text
+
             ->send();
             return  $this->render('send-gmail',[
                 'success'=>"Thành công",
             ]);
         }
-
       return  $this->render('send-gmail',[
           'success'=>"",
       ]);
+    }
+    public  function  actionSendListGmail()
+    {
+        $messages=[];
+        $model=User::find()->all();
+        foreach ($model as $item)
+        {
+            $messages[] = Yii::$app->mailer->compose()
+                ->setFrom('anhkhanh5539574@gmail.com')
+                ->setTo($item->email)
+                ->setSubject('Tao test nhờ tý')
+                ->setHtmlBody('<b>Trật tự ko nói gì</b>');
+        }
+        Yii::$app->mailer->sendMultiple($messages);
     }
 }
