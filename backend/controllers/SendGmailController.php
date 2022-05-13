@@ -55,4 +55,22 @@ class SendGmailController extends Controller
             ->attach(dirname(dirname(__DIR__)).'/README.md') // dirname(dirname(__DIR__)) -> /var/www/html/advanced
             ->send();
     }
+    public function actionSendFileListGmail()
+    {
+        $msg=[];
+        $model= User::find()->all();
+        foreach ($model as $item)
+        {
+            if($item->email!= null)
+            {
+                $msg[]= Yii::$app->mailer->compose()
+                    ->setFrom('anhkhanh5539574@gmail.com')
+                    ->setTo($item->email)
+                    ->setSubject('Gui file nhiều người')
+                    ->attach(dirname(dirname(__DIR__)).'/README.md')
+                    ->setHtmlBody("<b>gửi nhiều ấy nhé</b>") ;
+            }
+        }
+        Yii::$app->mailer->sendMultiple($msg);
+    }
 }
